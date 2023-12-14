@@ -17,17 +17,15 @@ router.get("/", AuthMiddleware, function (req: Request, res: Response) {
   DatabaseAdapter.db.all(`
   SELECT * FROM entries 
   WHERE created_at >= datetime('now', '-1 day', 'localtime') 
-  AND   created_at <= datetime('now', '+1 day', 'localtime')`,
+  AND   created_at <= datetime('now', '+1 day', 'localtime')
+  AND user_id = ?`, [res.locals.user.id],
     (err: any, entries: Entry[]) => {
 
       if (err) res.send(err);
 
-      console.log(entries)
-
       res.render("pages/index", { entries, user: res.locals.user });
 
     })
-
 
 });
 
