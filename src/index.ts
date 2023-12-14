@@ -11,7 +11,7 @@ import Routes from './routes'
 dotenv.config();
 
 // Setup the sqlite
-DatabaseAdapter.setupSchema();
+DatabaseAdapter.setupSchema(false);
 
 const app: Express = express();
 const port = 3000;

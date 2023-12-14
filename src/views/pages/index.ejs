@@ -17,45 +17,43 @@
     <header><%- include('../partials/header'); %></header>
 
     <div class="container">
-      <div id="reader" style="width: 300px; height: 300px"></div>
-      <canvas id="myChart"></canvas>
+      <!-- <div id="reader" style="width: 300px; height: 300px"></div> -->
 
+      <div class="dashboard">
+        <canvas id="dashboard-chart"></canvas>
+      </div>
       <button class="btn btn-primary" onclick="update()">Update</button>
     </div>
 
-    <script>
-      const ctx = document.getElementById('myChart');
+    <script src="/scripts/chart.js"></script>
 
-      let data = {
-        gender: 0,
-        weight: 80,
-        entries: [
-          { amount: 3, date: new Date('01/01/2024 09:00') },
-          { amount: 1, date: new Date('01/01/2024 10:00') },
-          { amount: 2, date: new Date('01/01/2024 13:00') },
-          { amount: 1, date: new Date('01/01/2024 15:00') }
-        ]
-      };
+    <script>
+
+      // Get all the database entries from the route and parse them
+      const dataEntries = <%- JSON.stringify(entries) %>;
+      const user = <%- JSON.stringify(user) %>;
 
       function calculateBAC(gender, amount, weight) {
         const widmarkFactor = gender === 0 ? 0.68 : 0.55;
         return Math.max((amount * 12) / (weight * widmarkFactor), 0);
       }
 
-      function generateDatasets(data) {
+      function generateDatasets(user, entries) {
+
         const metabolismRate = 0.15;
 
         // Get the start hour of the first
-        const startHour = data.entries.reduce((prev, curr) => {
-          return curr.date.getHours() < prev ? curr.date.getHours() : prev;
+
+        const startHour = entries.reduce((prev, curr) => {
+          return new Date(curr.created_at).getHours() < prev ? new Date(curr.created_at).getHours() : prev;
         }, 24);
 
         const hours = _.range(startHour, 24); // Create an array representing all hours in a day
 
         // Generate bar set (Amount of drinks)
-        const entries = hours.map((hour) => {
+        const amountPerHour = hours.map((hour) => {
           return _.sumBy(
-            data.entries.filter((e) => e.date.getHours() === hour),
+            entries.filter((e) => new Date(e.created_at).getHours() === hour),
             'amount'
           );
         });
@@ -65,8 +63,8 @@
         for (let i = 0; i < hours.length; i++) {
           let BAC = 0;
 
-          if (entries[i] > 0) {
-            BAC = calculateBAC(data.gender, entries[i], data.weight);
+          if (amountPerHour[i] > 0) {
+            BAC = calculateBAC(user.gender, amountPerHour[i], user.weight);
 
             if (i > 0) {
               const previousBAC = calculations[i - 1] || 0;
@@ -83,66 +81,16 @@
           calculations.push(Math.max(BAC.toFixed(2), 0));
         }
 
-        return { hours, entries, calculations };
+        return { hours, amountPerHour, calculations };
       }
 
-      function createChartData(hours, entries, calculations) {
-        return {
-          datasets: [
-            {
-              type: 'bar',
-              label: 'Amount of Drinks',
-              data: entries,
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              borderColor: 'rgba(75, 192, 192, 1)',
-              borderWidth: 1
-            },
-            {
-              type: 'line',
-              label: 'BAC',
-              data: calculations,
-              fill: false,
-              borderColor: 'rgba(255, 99, 132, 1)',
-              borderWidth: 2
-            }
-          ],
-          labels: hours.map((hour) => `${hour}:00`)
-        };
-      }
+      const { hours, amountPerHour, calculations} = generateDatasets(user, dataEntries);
 
-      const { hours, entries, calculations } = generateDatasets(data);
-      const mixedChart = new Chart(ctx, {
-        type: 'bar',
-        data: createChartData(hours, entries, calculations)
-      });
-
-      function update() {
-        data.entries.push({
-          amount: 1,
-          date: new Date('01/01/2024 19:00')
-        });
-
-        const { hours, entries, calculations } = generateDatasets(data);
-        const newData = createChartData(hours, entries, calculations);
-        mixedChart.data = newData;
-        mixedChart.update();
-      }
-
-      function onScanSuccess(decodedText, decodedResult) {
-        console.log(decodedResult);
-        console.log(decodedText);
-      }
-
-      let config = {
-        fps: 10,
-        qrbox: { width: 200, height: 200 },
-        rememberLastUsedCamera: true,
-        // Only support camera scan type.
-        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
-      };
-
-      let html5QrcodeScanner = new Html5QrcodeScanner('reader', config, /* verbose= */ false);
-      html5QrcodeScanner.render(onScanSuccess);
+      let chart = createChart('dashboard-chart', {
+        hours: hours,
+        entries: amountPerHour,
+        calculations: calculations
+      })
     </script>
   </body>
 </html>

@@ -3,4 +3,5 @@ export default interface User {
   username: string;
   password: string;
   gender?: number;
+  weight?: number;
 }

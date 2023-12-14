@@ -7,7 +7,6 @@ import DatabaseAdapter from '../utils/database-adapter'
 import User from '../types/user'
 
 const router = Router();
-
 function generateToken(user: User) {
   const secret = process.env.TOKEN_SECRET;
 
@@ -105,7 +104,5 @@ router.post('/register', function (req: Request, res: Response) {
     }
   );
 });
-
-
 
 export default router;
