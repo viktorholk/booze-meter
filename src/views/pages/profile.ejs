@@ -1,0 +1,147 @@
+<!-- FILEPATH: /C:/Users/snogd/OneDrive/Dokumenter/GitHub/booze-meter/src/views/pages/profile.ejs -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .profile-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .profile-username {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .profile-email {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .profile-alcohol {
+            font-size: 18px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <header><%- include('../partials/header'); %></header>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="profile-card">
+                    <div class="text-center">
+                        <h2 class="profile-name">John Doe</h2>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Username:</span>
+                            </div>
+                            <input type="text" class="form-control profile-username" value="johndoe">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Email:</span>
+                            </div>
+                            <input type="email" class="form-control profile-email" value="johndoe@example.com">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Password:</span>
+                            </div>
+                            <input type="password" class="form-control profile-email" value="********">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Yearly Alcohol Consumption:</span>
+                            </div>
+                            <input type="text" class="form-control profile-alcohol" disabled="true" value="1000 units">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <!-- ...existing code... -->
+
+                        <h3 class="mt-4">Alcohol Consumption History</h3>
+                        <ul class="list-group mb-3" id="alcoholHistory">
+                            <!-- Sample list item -->
+                            <li class="list-group-item">2023-1-1: 5 units</li>
+                        </ul>
+
+                        <h4>Add New Entry</h4>
+                        <form id="addAlcoholEntry" class="form-inline justify-content-center mb-3">
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="newEntryDate">
+                                <input type="number" class="form-control" id="newEntryAmount" placeholder="Amount">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+
+        function addBackgroundImage() {
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+            const body = document.querySelector('body');
+            const img = document.createElement('img');
+            img.src = 'beer.png';
+            img.style.position = 'absolute';
+            img.style.width = '50px';
+            img.style.height = '50px';
+            img.style.left = Math.random() * window.innerWidth + 'px';
+            img.style.top = Math.random() * window.innerHeight + 'px';
+            img.style.zIndex = -1;
+            body.appendChild(img);
+        }
+
+        document.getElementById('addAlcoholEntry').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const date = document.getElementById('newEntryDate').value;
+            const amount = document.getElementById('newEntryAmount').value;
+            if (date && amount) {
+                const listItem = document.createElement('li');
+                listItem.classList.add('list-group-item');
+                listItem.textContent = `${date}: ${amount} units`;
+                document.getElementById('alcoholHistory').appendChild(listItem);
+                addBackgroundImage();
+            }
+        });
+    </script>
+</body>
+
+</html>
