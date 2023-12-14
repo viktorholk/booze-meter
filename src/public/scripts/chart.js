@@ -52,6 +52,26 @@ function createChart(id, options) {
           }
         }
       }
-    }
+    },
+    plugins: [
+      {
+        afterDraw: function (chart) {
+          if (chart.data.datasets[0].data.length == 0) {
+            let ctx = chart.ctx;
+            let width = chart.width;
+            let height = chart.height;
+
+            chart.clear();
+            ctx.save();
+            ctx.font = '30px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = 'white';
+            ctx.fillText('No data to display', width / 2, height / 2);
+            ctx.restore();
+          }
+        }
+      }
+    ]
   });
 }
