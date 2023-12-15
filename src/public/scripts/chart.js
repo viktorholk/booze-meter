@@ -1,4 +1,4 @@
-function createChart(id, options) {
+function createChart(id, data) {
   const chartContext = document.getElementById(id);
 
   return new Chart(chartContext, {
@@ -8,21 +8,22 @@ function createChart(id, options) {
         {
           type: 'line',
           label: 'BAC',
-          data: options.calculations,
+          data: data.calculations,
           fill: false,
-          borderColor: '#fff',
+          borderColor: 'rgba(99, 132, 255, 0.8)',
+          backgroundColor: 'rgba(99, 132, 255, 1)',
           borderWidth: 2
         },
         {
           type: 'bar',
           label: 'Amount of Drinks',
-          data: options.entries,
+          data: data.patchedEntries.map((e) => e.total_amount),
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1
         }
       ],
-      labels: options.hours.map((hour) => `${hour}:00`)
+      labels: data.patchedEntries.map((e) => e.date.format('HH:mm'))
     },
     options: {
       interaction: {
@@ -31,15 +32,28 @@ function createChart(id, options) {
       },
       scales: {
         y: {
+          title: {
+            display: true,
+            text: 'BAC / Amounts',
+            color: '#fff'
+          },
           ticks: {
-            color: '#fff',
-            font: {}
+            color: '#fff'
           }
         },
         x: {
+          title: {
+            display: true,
+            text: 'Time (Hour)',
+            color: '#fff'
+          },
           ticks: {
-            color: '#fff',
-            font: {}
+            // Highlight the tick being the current hour
+            color: (c) => {
+              if (c['tick']['label'][0] == new Date().getHours().toString()) {
+                return 'rgba(255, 99, 132, 1)';
+              } else return '#fff';
+            }
           }
         }
       },
@@ -56,6 +70,7 @@ function createChart(id, options) {
     plugins: [
       {
         afterDraw: function (chart) {
+          // If there is no data, instead of plotting an empty graph, just prompt with No data to display
           if (chart.data.datasets[0].data.length == 0) {
             let ctx = chart.ctx;
             let width = chart.width;

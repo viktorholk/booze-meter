@@ -13,15 +13,26 @@ const router = Router();
 // Use the AuthMiddleware for the index and profile page
 router.get("/", AuthMiddleware, function (req: Request, res: Response) {
   // Get the last 24 hours entries for the user
+  // Summerize and group the total amounts within the same hour
+  // Order by the dates
 
   DatabaseAdapter.db.all(`
-  SELECT * FROM entries 
-  WHERE created_at >= datetime('now', '-1 day', 'localtime') 
-  AND   created_at <= datetime('now', '+1 day', 'localtime')
-  AND user_id = ?`, [res.locals.user.id],
+    SELECT
+      strftime('%Y-%m-%d %H:00:00', created_at) AS date,
+      SUM(amount) AS total_amount
+    FROM
+      entries
+    WHERE
+      created_at >= datetime('now', '-2 day', 'localtime') 
+      AND created_at <= datetime('now', '+2 day', 'localtime')
+      AND user_id = ?
+    GROUP BY
+      date 
+    ORDER BY
+      date ASC`, [res.locals.user.id],
     (err: any, entries: Entry[]) => {
 
-      if (err) res.send(err);
+      if (err) return res.send(err);
 
       res.render("pages/index", { entries, user: res.locals.user });
 
