@@ -1,5 +1,65 @@
+body {
+  background-color: #f2f2f2;
+}
+
+.navbar-brand {
+  color: rgba(99, 132, 255, 1) !important;
+}
+
+.navbar {
+  background-color: #1a1a1a;
+  margin-bottom: 32px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.nav-item a {
+  color: white;
+
+  transition: all ease-in-out 100ms;
+}
+
+.nav-item a:hover {
+  color: rgba(99, 132, 255, 0.8);
+  font-weight: bold;
+}
 .dashboard {
   padding: 16px;
   background-color: #1a1a1a;
   border-radius: 16px;
+
+  color: white;
+  margin-bottom: 16px;
+}
+
+.dashboard .action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard .action div {
+  flex: 1;
+  text-align: center;
+}
+
+.dashboard .add {
+  color: #1a1a1a;
+  background-color: rgba(99, 132, 255, 1);
+  font-weight: bold;
+  width: 100%;
+}
+
+.f-info {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  gap: 16px;
+}
+
+.f-info div {
+  flex: 1;
+  background-color: #1a1a1a;
+  border-radius: 16px;
+  height: 256px;
 }
