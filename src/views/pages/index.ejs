@@ -4,14 +4,6 @@
     <%- include('../partials/head'); %>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"
-      integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"
       integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+GAlNkNNqVC7YyIV+NwqCTJe2hDWCiffTyRNOeGEzRRJ9ifvRm/HCzGYg=="
@@ -23,7 +15,6 @@
   <body>
     <div class="container">
       <header><%- include('../partials/header'); %></header>
-      <!-- <div id="reader" style="width: 300px; height: 300px"></div> -->
 
       <div class="dashboard">
         <canvas id="dashboard-chart"></canvas>
@@ -31,7 +22,7 @@
         <div class="action">
           <div>Time until sober:</div>
           <div>
-            <button class="btn add">+ Add</button>
+            <button class="btn add" data-toggle="modal" data-target="#registerModal">+ Add</button>
           </div>
         </div>
       </div>
@@ -48,10 +39,206 @@
       </p>
     </div>
 
+    <!-- <div class="modal fade" id="registerModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add New Entry</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="">
+              <div class="form-row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="type">Type</label>
+                    <select name="type" id="type" class="form-control" required>
+                      <% items.forEach((item) => { %>
+                      <option value="<%=item.id%>"><%=item.title%></option>
+                      <%= item.name%><% })%>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <label for="amount">Amount</label>
+                  <input
+                    type="number"
+                    class="form-control text-center"
+                    name="amount"
+                    id="amount"
+                    value="1"
+                    min="1"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col"></div>
+                <div class="col-4"></div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+              <label class="form-check-label" for="flexCheckDefault">Advanced options</label>
+            </div>
+
+            <div class="submit">
+              <input type="time" class="form-control" name="time-picker" id="time-picker" required />
+            </div>
+            <form class="form-inline">
+              <div class="form-group">
+                <button type="button" class="btn">Add</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add New Entry</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="advancedCheck" onchange="toggleAdvanced(this)" />
+                <label class="form-check-label" for="advancedCheck">Advanced</label>
+              </div>
+
+              <div id="advancedSettings" style="display: none">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="volume">Volume (mL)</label>
+                      <input class="form-control" type="number" min="0" id="volume" name="volume" value="330" />
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="alcoholProcentage">Alcohol %</label>
+                      <input
+                        class="form-control"
+                        type="number"
+                        min="0"
+                        max="100"
+                        id="alcoholProcentage"
+                        name="alcoholProcentage"
+                        value="4.6"
+                        step="0.1"
+                      />
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="amountAdvanced">Amount</label>
+                      <input
+                        class="form-control"
+                        type="number"
+                        name="amountAdvanced"
+                        id="amountAdvanced"
+                        min="1"
+                        value="1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="defaultSettings">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="type">Type</label>
+                      <select name="type" id="type" class="form-control" required>
+                        <% items.forEach((item) => { %>
+                        <option value="<%=item.id%>"><%=item.title%></option>
+                        <%= item.name%><% })%>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                      <label for="amount">Amount</label>
+                      <input class="form-control" type="number" name="amount" id="amount" min="1" value="1" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="col">
+                  <button type="button" class="btn scan-btn" data-toggle="modal" data-target="#scanModal">
+                    <img src="/images/barcode-scanner.svg" />
+                    Scan
+                  </button>
+                </div>
+
+                <div class="col">
+                  <input class="form-control" type="time" name="time-picker" id="time-picker" />
+                </div>
+                <div class="col">
+                  <button  class="btn add-btn"">Add</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <button type="button" class="btn" data-toggle="modal" data-target="#scanModal">Scan</button> -->
+
+    <div class="modal" id="scanModal" tabindex="-2" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Scan</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="reader"></div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
+
     <script src="/scripts/chart.js"></script>
     <script src="/scripts/utils.js"></script>
+    <script src="/scripts/scanner.js"></script>
 
     <script>
+      function toggleAdvanced(element) {
+        const advancedElement = document.getElementById('advancedSettings');
+        const defaultElement = document.getElementById('defaultSettings');
+
+        if (element.checked) {
+          advancedElement.style.display = 'block';
+          defaultElement.style.display = 'none';
+        } else {
+          advancedElement.style.display = 'none';
+          defaultElement.style.display = 'block';
+        }
+      }
+
+      var myModal = new bootstrap.Modal(document.getElementById('registerModal'));
+      myModal.show();
+
+      // Select the current time by default in the timepicker
+      const now = new Date();
+      document.getElementById('time-picker').value = `${now.getHours()}:${now.getMinutes()}`;
+
       // Get all the database entries from the route and parse them
       // A bit tricky with the JSON parse and stringify, but it works
       const dataEntries = JSON.parse('<%- JSON.stringify(entries) %>');

@@ -63,3 +63,44 @@ body {
   border-radius: 16px;
   height: 256px;
 }
+
+.modal-content {
+  background-color: #1a1a1a;
+  color: #fff;
+  border-radius: 16px;
+}
+
+.modal-content .close {
+  color: rgba(99, 132, 255, 1);
+  opacity: 0.9;
+  text-shadow: none;
+}
+
+.modal-title {
+  font-weight: bold;
+}
+
+.modal-header,
+.modal-footer {
+  border: none;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal .add-btn {
+  color: #1a1a1a;
+  background-color: rgba(99, 132, 255, 1);
+  font-weight: bold;
+  width: 100%;
+}
+.modal .scan-btn {
+  width: 100%;
+  font-weight: bold;
+}
+
+.form-control {
+  text-align: center;
+}
