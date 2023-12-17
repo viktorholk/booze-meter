@@ -259,9 +259,9 @@
           // Handle the entry
           // Clear the scanner and and close the modal
           html5QrcodeScanner.clear().then((_) => {
-            const existingDrink = drinks.find((d) => d.barcode == barcode);
+            const existingDrinkIndex = drinks.findIndex((d) => d.barcode == barcode);
 
-            if (existingDrink) document.getElementById('drinkId').selectedIndex = existingDrink.id;
+            if (existingDrinkIndex) document.getElementById('drinkId').selectedIndex = existingDrinkIndex;
             else {
               // Handle the advanced checkbox
               const checkbox = document.getElementById('advancedCheck');
