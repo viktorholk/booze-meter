@@ -50,7 +50,7 @@ function createChart(id, groupedEntries, calculations) {
           ticks: {
             // Highlight the tick being the current hour
             color: (c) => {
-              if (c['tick']['label'][0] == new Date().getHours().toString()) {
+              if (c['tick']['label'] == moment().format('HH') + ':00') {
                 return 'rgba(255, 99, 132, 1)';
               } else return '#fff';
             }
