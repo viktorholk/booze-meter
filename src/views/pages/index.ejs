@@ -19,8 +19,8 @@
       <div class="dashboard">
         <canvas id="dashboard-chart"></canvas>
 
-        <div class="action">
-          <div>Time until sober:</div>
+        <div class="panel">
+          <div class="current-bac">Current BAC: <span id="current-bac">0.0%</span></div>
           <div>
             <button class="btn add" onclick="registerModalOnClick()" data-toggle="modal" data-target="#registerModal">
               Add
@@ -29,10 +29,52 @@
         </div>
       </div>
 
-      <div class="f-info">
-        <div>1</div>
+      <div class="panels">
+        <div class="summary-panel panel">
+          <h1>Summary</h1>
 
-        <div>2</div>
+          <div class="summaries">
+            <div>
+              <div>You started drinking at</div>
+              <div class="time" id="startedDrinkingTime">18:00</div>
+            </div>
+            <div>
+              <div>You stopped drinking at</div>
+              <div class="time" id="stoppedDrinkingTime">18:00</div>
+            </div>
+            <div>
+              <div>You may be driving at</div>
+              <div class="time" id="drivingTime">18:00</div>
+            </div>
+            <div>
+              <div>You are sober at</div>
+              <div class="time" id="soberTime">18:00</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="entries-panel panel">
+          <h1>Entries (<%= entries.length %>)</h1>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Drink</th>
+                <th>Amount</th>
+                <th>Date</th>
+              </tr>
+
+              <% entries.forEach((entry) => { %>
+
+              <tr>
+                <td><%= entry.title%></td>
+                <td><%= entry.amount%></td>
+                <td><%= entry.date%></td>
+              </tr>
+
+              <% }); %>
+            </thead>
+          </table>
+        </div>
       </div>
 
       <p class="mt-5 text-center text-muted">
@@ -249,6 +291,39 @@
       const { groupedEntries, calculations } = generateDatasets(user, dataEntries);
 
       createChart('dashboard-chart', groupedEntries, calculations);
+
+      // Get the current BAC and display it
+
+      const currentDateIndex = Object.keys(groupedEntries).findIndex(
+        (date) => moment(date).format('HH') == moment().format('HH')
+      );
+
+      const currentBAC = calculations[currentDateIndex].toFixed(2);
+
+      const currentBACElement = document.getElementById('current-bac');
+      currentBACElement.innerHTML = `${currentBAC}%`;
+      if (currentBAC > 0.5) currentBACElement.classList.add('danger');
+
+      // Update the summaries
+      document.getElementById('startedDrinkingTime').innerHTML = moment(Object.keys(groupedEntries)[0]).format('HH:mm');
+
+      const stoppedDrinkingTimeIndex = Object.values(groupedEntries).findLastIndex((e) => e[0].amount > 0);
+
+      document.getElementById('stoppedDrinkingTime').innerHTML = moment(
+        Object.keys(groupedEntries)[stoppedDrinkingTimeIndex]
+      ).format('HH:mm');
+
+      // Get the index where the BAC is just below 0.50
+      // We have the index from where we stopped drinking so we will slice the array from there
+      const drivingIndex = calculations.slice(stoppedDrinkingTimeIndex).findIndex((bac) => bac.toFixed(1) <= 0.5);
+
+      document.getElementById('drivingTime').innerHTML = moment(
+        Object.keys(groupedEntries).slice(stoppedDrinkingTimeIndex)[drivingIndex]
+      ).format('HH:mm');
+
+      document.getElementById('soberTime').innerHTML = moment(
+        Object.keys(groupedEntries)[Object.keys(groupedEntries).length - 1]
+      ).format('HH:mm');
 
       function onScanSuccess(_, result) {
         const barcode = result.decodedText;

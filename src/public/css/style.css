@@ -32,36 +32,54 @@ body {
   margin-bottom: 16px;
 }
 
-.dashboard .action {
+.dashboard .panel {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.dashboard .action div {
+.dashboard .panel div {
   flex: 1;
   text-align: center;
+}
+
+.current-bac {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.current-bac span.danger {
+  background-color: rgba(255, 99, 132, 1);
+}
+
+.current-bac span {
+  display: inline-block;
+  background-color: #61ff61;
+  padding: 8px;
+  border-radius: 16px;
+  color: #1a1a1a;
 }
 
 .dashboard .add {
   color: #1a1a1a;
   background-color: rgba(99, 132, 255, 1);
+  font-size: 1.5em;
   font-weight: bold;
   width: 100%;
 }
 
-.f-info {
+.panels {
   display: flex;
   justify-content: space-between;
   color: white;
   gap: 16px;
 }
 
-.f-info div {
+.panels > div {
   flex: 1;
   background-color: #1a1a1a;
   border-radius: 16px;
-  height: 256px;
+  height: 275px;
 }
 
 .modal-content {
@@ -108,4 +126,30 @@ body {
 .scan-body {
   display: flex;
   justify-content: center;
+}
+
+.panel {
+  padding: 16px;
+}
+.panel h1 {
+  font-weight: bold;
+}
+
+.entries-panel {
+  overflow-y: scroll;
+}
+
+.summaries > div {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid white;
+  font-size: 20px;
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+.summaries .time {
+  color: rgba(99, 132, 255, 1);
+  font-weight: bold;
+  font-style: normal;
 }

@@ -98,7 +98,7 @@ function generateDatasets(user, entries) {
   for (let i = 0; i < hoursRemaining; i++) {
     const date = moment(dates[dates.length - 1]).add(i + 1, 'hours');
 
-    groupedEntries[date] = { amount: 0 };
+    groupedEntries[date] = [{ amount: 0 }];
     calculations.push(Math.max(latestBAC - 0.15 * (i + 1), 0));
   }
 
