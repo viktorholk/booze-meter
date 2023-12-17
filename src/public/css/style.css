@@ -104,3 +104,8 @@ body {
 .form-control {
   text-align: center;
 }
+
+.scan-body {
+  display: flex;
+  justify-content: center;
+}

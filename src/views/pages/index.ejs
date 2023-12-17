@@ -22,7 +22,9 @@
         <div class="action">
           <div>Time until sober:</div>
           <div>
-            <button class="btn add" onclick="registerModalOnClick()"data-toggle="modal" data-target="#registerModal" >Add</button>
+            <button class="btn add" onclick="registerModalOnClick()" data-toggle="modal" data-target="#registerModal">
+              Add
+            </button>
           </div>
         </div>
       </div>
@@ -51,17 +53,29 @@
           <div class="modal-body">
             <form action="/entries" method="post">
               <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="advancedCheck" name="advancedCheck"  onchange="toggleAdvanced(this)" />
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="advancedCheck"
+                  name="advancedCheck"
+                  onchange="toggleAdvanced(this)"
+                />
                 <label class="form-check-label" for="advancedCheck">Advanced</label>
               </div>
 
               <div id="advancedSettings" style="display: none">
-
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
                       <label for="volume">Volume (mL)</label>
-                      <input class="form-control" type="number" min="0" id="advancedVolume" name="advancedVolume" value="330" />
+                      <input
+                        class="form-control"
+                        type="number"
+                        min="0"
+                        id="advancedVolume"
+                        name="advancedVolume"
+                        placeholder="330"
+                      />
                     </div>
                   </div>
 
@@ -75,7 +89,7 @@
                         max="100"
                         id="advancedAlcoholProcentage"
                         name="advancedAlcoholProcentage"
-                        value="4.6"
+                        placeholder="4.6"
                         step="0.1"
                       />
                     </div>
@@ -95,24 +109,31 @@
                   </div>
                 </div>
 
-
                 <div class="form-row">
-
                   <div class="col">
-
                     <div class="form-group">
                       <label for="advancedTitle">Title</label>
-                      <input class="form-control" type="text" name="advancedTitle" id="advancedTitle" placeholder="Tuborg (330mL)" />
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="advancedTitle"
+                        id="advancedTitle"
+                        placeholder="Tuborg (330mL)"
+                      />
                     </div>
-
                   </div>
 
                   <div class="col">
                     <div class="form-group">
                       <label for="advancedTitle">Barcode (Optional)</label>
-                      <input class="form-control" type="text" name="advancedBarcode" id="advancedBarcode" placeholder="5741000116487" />
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="advancedBarcode"
+                        id="advancedBarcode"
+                        placeholder="5741000116487"
+                      />
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -121,10 +142,10 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="drinkId">Drink</label>
-                      <select name="drinkId" id="drinkId" class="form-control" >
+                      <select name="drinkId" id="drinkId" class="form-control">
                         <% drinks.forEach((drink) => { %>
                         <option value="<%=drink.id%>"><%=drink.title%></option>
-                       <% })%>
+                        <% })%>
                       </select>
                     </div>
                   </div>
@@ -139,7 +160,13 @@
 
               <div class="form-row">
                 <div class="col">
-                  <button type="button" class="btn scan-btn" data-toggle="modal" data-target="#scanModal">
+                  <button
+                    type="button"
+                    class="btn scan-btn"
+                    onclick="scanModalOnClick()"
+                    data-toggle="modal"
+                    data-target="#scanModal"
+                  >
                     <img src="/images/barcode-scanner.svg" />
                     Scan
                   </button>
@@ -149,7 +176,7 @@
                   <input class="form-control" type="time" name="timePicker" id="timePicker" />
                 </div>
                 <div class="col">
-                  <button  class="btn add-btn"">Add</button>
+                  <button class="btn add-btn">Add</button>
                 </div>
               </div>
             </form>
@@ -159,7 +186,7 @@
     </div>
 
     <div class="modal" id="scanModal" tabindex="-2" role="dialog">
-      <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Scan</h5>
@@ -167,8 +194,8 @@
               <span>&times;</span>
             </button>
           </div>
-          <div class="modal-body">
-            <div id="reader"></div>
+          <div class="modal-body scan-body">
+            <div id="reader" style="width: 100%"></div>
           </div>
           <div class="modal-footer"></div>
         </div>
@@ -176,27 +203,25 @@
     </div>
 
     <script
-    src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"
-  ></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"
-  ></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"
-  ></script>
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
     <script src="/scripts/chart.js"></script>
     <script src="/scripts/utils.js"></script>
-    <script src="/scripts/scanner.js"></script>
 
     <script>
-
-function toggleAdvanced(element) {
+      function toggleAdvanced(element) {
         const advancedElement = document.getElementById('advancedSettings');
         const defaultElement = document.getElementById('defaultSettings');
 
@@ -214,15 +239,59 @@ function toggleAdvanced(element) {
         document.getElementById('timePicker').value = now.format('HH:mm');
       }
 
-        // Get all the database entries from the route and parse them
-        // A bit tricky with the JSON parse and stringify, but it works
-        const dataEntries = JSON.parse('<%- JSON.stringify(entries) %>');
-        const user = JSON.parse('<%- JSON.stringify(user) %>');
+      // Get all the database entries from the route and parse them
+      // A bit tricky with the JSON parse and stringify, but it works
+      const dataEntries = JSON.parse('<%- JSON.stringify(entries) %>');
+      const drinks = JSON.parse('<%- JSON.stringify(drinks) %>');
+      const user = JSON.parse('<%- JSON.stringify(user) %>');
 
-        // Get the datasets and plot the chart
-        const {groupedEntries, calculations }= generateDatasets(user, dataEntries);
+      // Get the datasets and plot the chart
+      const { groupedEntries, calculations } = generateDatasets(user, dataEntries);
 
-        createChart('dashboard-chart', groupedEntries, calculations);
+      createChart('dashboard-chart', groupedEntries, calculations);
+
+      function onScanSuccess(_, result) {
+        const barcode = result.decodedText;
+        const barcodeFormat = result.result.format.format;
+
+        if (barcodeFormat == 9) {
+          // Handle the correct format
+          // Handle the entry
+          // Clear the scanner and and close the modal
+          html5QrcodeScanner.clear().then((_) => {
+            const existingDrink = drinks.find((d) => d.barcode == barcode);
+
+            if (existingDrink) document.getElementById('drinkId').selectedIndex = existingDrink.id;
+            else {
+              // Handle the advanced checkbox
+              const checkbox = document.getElementById('advancedCheck');
+              checkbox.checked = true;
+              toggleAdvanced(checkbox);
+
+              // Populate the barcode field
+              document.getElementById('advancedBarcode').value = barcode;
+            }
+            $('#scanModal').modal('hide');
+          });
+        }
+      }
+
+      var html5QrcodeScanner = new Html5QrcodeScanner(
+        'reader',
+        {
+          fps: 10,
+          qrbox: { width: 300, height: 200 },
+          rememberLastUsedCamera: true,
+          // Only support camera scan type.
+          supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+        },
+        false
+      );
+
+      // Setup the Barcode Scanner
+      function scanModalOnClick() {
+        html5QrcodeScanner.render(onScanSuccess);
+      }
     </script>
   </body>
 </html>
