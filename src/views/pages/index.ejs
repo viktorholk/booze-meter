@@ -201,7 +201,7 @@
               </div>
 
               <div class="form-row">
-                <div class="col">
+                <div class="col-3">
                   <button
                     type="button"
                     class="btn scan-btn"
@@ -214,11 +214,11 @@
                   </button>
                 </div>
 
-                <div class="col">
-                  <input class="form-control" type="time" name="timePicker" id="timePicker" />
+                <div class="col-5">
+                  <input class="form-control" type="datetime-local" name="datetimePicker" id="datetimePicker" />
                 </div>
-                <div class="col">
-                  <button class="btn add-btn">Add</button>
+                <div class="col-4">
+                  <button class="btn btn-primary" style="width: 100%">Add</button>
                 </div>
               </div>
             </form>
@@ -278,7 +278,7 @@
       function registerModalOnClick() {
         // Select the current time by default in the timepicker
         const now = moment();
-        document.getElementById('timePicker').value = now.format('HH:mm');
+        document.getElementById('datetimePicker').value = now.format('YYYY-MM-DD HH:mm');
       }
 
       // Get all the database entries from the route and parse them

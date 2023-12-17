@@ -23,10 +23,9 @@ const router = Router();
 // Create new entry
 router.post('/', AuthMiddleware, function (req: Request, res: Response) {
   const userId = res.locals.user.id;
-
   const data = req.body;
 
-  const date = moment(Number(data.timePicker.replace(':', '')), 'HHmm');
+  const date = moment(moment(data.datetimePicker));
 
   // If advanced check we will create the entry, but also add the drink to the database so it can be selected next time
   if (data.advancedCheck !== 'on') {
