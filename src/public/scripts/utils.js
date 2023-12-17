@@ -92,7 +92,6 @@ function generateDatasets(user, entries) {
   let latestBAC = calculations[calculations.length - 1];
 
   const hoursRemaining = Math.ceil(latestBAC / 0.15);
-  console.log(hoursRemaining);
 
   const dates = Object.keys(groupedEntries);
 

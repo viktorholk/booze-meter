@@ -25,7 +25,6 @@ router.post('/', AuthMiddleware, function (req: Request, res: Response) {
   const userId = res.locals.user.id;
 
   const data = req.body;
-  console.log(data);
 
   const date = moment(Number(data.timePicker.replace(':', '')), 'HHmm');
 
