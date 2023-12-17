@@ -56,24 +56,12 @@
               </div>
 
               <div id="advancedSettings" style="display: none">
-                <div class="form-row">
 
-                  <div class="col-8">
-
-                    <div class="form-group">
-                      <label for="advancedTitle">Title</label>
-                      <input class="form-control" type="text" name="advancedTitle" id="advancedTitle" placeholder="Tuborg (33cl)" />
-                    </div>
-
-                  </div>
-
-                  <div class="col"></div>
-                </div>
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
                       <label for="volume">Volume (mL)</label>
-                      <input class="form-control" type="number" min="0" id="advancedVolume" name="advanedVolume" value="330" />
+                      <input class="form-control" type="number" min="0" id="advancedVolume" name="advancedVolume" value="330" />
                     </div>
                   </div>
 
@@ -98,12 +86,33 @@
                       <input
                         class="form-control"
                         type="number"
-                        name="amountAdvanced"
-                        id="amountAdvanced"
+                        name="advancedAmount"
+                        id="advancedAmount"
                         min="1"
                         value="1"
                       />
                     </div>
+                  </div>
+                </div>
+
+
+                <div class="form-row">
+
+                  <div class="col">
+
+                    <div class="form-group">
+                      <label for="advancedTitle">Title</label>
+                      <input class="form-control" type="text" name="advancedTitle" id="advancedTitle" placeholder="Tuborg (330mL)" />
+                    </div>
+
+                  </div>
+
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="advancedTitle">Barcode (Optional)</label>
+                      <input class="form-control" type="text" name="advancedBarcode" id="advancedBarcode" placeholder="5741000116487" />
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -111,8 +120,8 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label for="type">Type</label>
-                      <select name="type" id="type" class="form-control" >
+                      <label for="drinkId">Drink</label>
+                      <select name="drinkId" id="drinkId" class="form-control" >
                         <% drinks.forEach((drink) => { %>
                         <option value="<%=drink.id%>"><%=drink.title%></option>
                        <% })%>
