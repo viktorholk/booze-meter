@@ -10,7 +10,7 @@ import Routes from './routes';
 dotenv.config();
 
 // Create the database schema
-DatabaseAdapter.setupSchema(false);
+DatabaseAdapter.setupSchema();
 
 const app: Express = express();
 const port = 3000;
