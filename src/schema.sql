@@ -5,21 +5,21 @@ CREATE TABLE IF NOT EXISTS users(
   gender integer DEFAULT 0,
   weight integer DEFAULT 80
 );
-CREATE TABLE IF NOT EXISTS items (
+CREATE TABLE IF NOT EXISTS drinks (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  code TEXT NOT NULL UNIQUE,
   title TEXT NOT NULL,
-  description TEXT NOT NULL,
-  size INTEGER NOT NULL
+  volume INTEGER NOT NULL,
+  alcoholPercentage REAL NOT NULL,
+  barcode TEXT UNIQUE
 );
 CREATE TABLE IF NOT EXISTS entries (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
-  item_id INTEGER NOT NULL,
+  drink_id INTEGER NOT NULL,
   amount INTEGER NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(user_id) REFERENCES users(id),
-  FOREIGN KEY(item_id) REFERENCES items(id)
+  FOREIGN KEY(drink_id) REFERENCES drinks(id)
 );
 -- encrypted string is 'password'
 INSERT
@@ -29,26 +29,13 @@ VALUES (
     '$2a$10$.0NA5x8QddbRIbeq.c.Rze.zudtVgASdi.KhKDvvYeTIFKZ0g/gIe'
   );
 INSERT
-  OR IGNORE INTO items (code, title, description, size)
+  OR IGNORE INTO drinks (title, volume, alcoholPercentage, barcode)
 VALUES (
-    '5740600371685',
-    'Carlsberg 33cl',
-    'A refreshing drink',
-    12
+    'Royal Classic (330mL)',
+    330,
+    4.6,
+    '5741000116487'
   );
 INSERT
-  OR IGNORE INTO items (code, title, description, size)
-VALUES (
-    '5712875342110',
-    'Salling Sour Cream & Onion Chips',
-    'A refreshing potato',
-    5
-  );
-INSERT
-  OR IGNORE INTO items (code, title, description, size)
-VALUES (
-    '5719801007815',
-    'Salt Water Spray',
-    'i am zooted',
-    5
-  );
+  OR IGNORE INTO drinks (title, volume, alcoholPercentage)
+VALUES ('Vodka Shot (330mL)', 44, 35);

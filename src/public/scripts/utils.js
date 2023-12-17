@@ -2,9 +2,19 @@
 
 // Method that calculates the BAC from gender, amount of drinks and weight
 // Uses the widmarkFactor to calculate
-function calculateBAC(gender, amount, weight) {
+function calculateBAC(entry, user) {
+  if (entry.amount == 0) return 0;
+
+  // Default weight to 80 kg and gender to male
+  const weight = user.weight || 80;
+  const gender = user.gender || 0;
+
   const widmarkFactor = gender === 0 ? 0.68 : 0.55;
-  return Math.max((amount * 12) / (weight * widmarkFactor), 0);
+
+  // 0.779 is the density of the ethanol
+  const alcoholInGrams = (entry.volume * entry.alcoholPercentage * 0.789) / 100;
+
+  return Math.max((entry.amount * alcoholInGrams) / (weight * widmarkFactor), 0);
 }
 
 // We need to format the data from the api so we can present it in the chart
@@ -28,8 +38,10 @@ function generateDatasets(user, entries) {
       // Start the loop at 1 since it is in hours we are adding
       for (let j = 1; j <= elapsedTime; j++) {
         // Clone the entry so we dont mutate
-        let newEntry = _.clone(entry);
-        newEntry.total_amount = 0;
+        let newEntry = {
+          date: moment(entry.date),
+          amount: 0
+        };
         // Increment the date with the elapsed hours
         newEntry.date = moment(previousDate).add(j, 'hours');
         patchedEntries.push(newEntry);
@@ -39,31 +51,39 @@ function generateDatasets(user, entries) {
     patchedEntries.push(entry);
   }
 
-  // This is the general value for alcohol metabolism
-  const metabolismRate = 0.15;
-  // We will store all our BAC calculations in this variables
-  let calculations = [];
+  // Regroup the patched entries by the date
+  // This is because there can be multiple entries within the same hour being different drinks
 
-  for (let i = 0; i < patchedEntries.length; i++) {
-    const entry = patchedEntries[i];
+  let groupedEntries = {};
 
-    // If total_amount > 0 we will calculate the BAC, and if there are previous calculations we will add them and subtract with the metabolism rate
-    if (entry.total_amount > 0) {
-      BAC = calculateBAC(user.gender, entry.total_amount, user.weight);
-      if (i > 0) {
-        const previousBAC = calculations[i - 1] || 0;
-        BAC += previousBAC;
-        // Make sure we don't go below 0, with Math.max
-        BAC = Math.max(BAC - metabolismRate, 0);
-      }
-    } else {
-      // No drinks has been consumed this hour so just subtract the metabolism
-      // Make sure we don't go below 0 with Math.max
-      BAC = Math.max(calculations[i - 1] - metabolismRate, 0);
-    }
+  for (entry of patchedEntries) {
+    const exists = groupedEntries[entry.date] !== undefined;
 
-    calculations.push(Math.max(BAC.toFixed(2), 0));
+    const newEntry = _.omit(entry, 'date');
+
+    if (exists) {
+      groupedEntries[entry.date].push(newEntry);
+    } else groupedEntries[entry.date] = [newEntry];
   }
 
-  return { patchedEntries, calculations };
+  // This is the general value for alcohol metabolism
+  const metabolismRate = 0.15;
+
+  // Calculate the BAC value of each entry
+  let calculations = [];
+
+  for (const [date, entries] of Object.entries(groupedEntries)) {
+    let BAC = _.sum(_.map(entries, (e) => calculateBAC(e, user)));
+
+    if (calculations.length > 0) {
+      const previous = calculations[calculations.length - 1];
+
+      BAC += previous;
+      BAC = Math.max(BAC - metabolismRate, 0);
+    }
+
+    calculations.push(BAC);
+  }
+
+  return { groupedEntries, calculations };
 }

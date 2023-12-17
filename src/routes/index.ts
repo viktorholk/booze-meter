@@ -1,57 +1,68 @@
-
-import { Router, Request, Response } from "express";
+import { Router, Request, Response } from 'express';
 
 import AuthMiddleware from '../middleware/auth';
 
-import AuthRouter from './auth'
+import AuthRouter from './auth';
+import EntriesRouter from './entries';
 import DatabaseAdapter from '../utils/database-adapter';
 
 import Entry from '../types/entry';
-import Item from '../types/item';
+import Drink from '../types/drink';
 
 const router = Router();
 
 // Use the AuthMiddleware for the index and profile page
-router.get("/", AuthMiddleware, function (req: Request, res: Response) {
+router.get('/', AuthMiddleware, function (req: Request, res: Response) {
   // This is Javascript Callback Hell, but it works
 
   // Get the last 24 hours entries for the user
-  // Summerize and group the total amounts within the same hour
+  // Summerize and group the amounts, of the same drink, within the same hour
   // Order by the dates
-  DatabaseAdapter.db.all(`
-    SELECT
-      strftime('%Y-%m-%d %H:00:00', created_at) AS date,
-      SUM(amount) AS total_amount
-    FROM
-      entries
+  DatabaseAdapter.db.all(
+    `
+    SELECT 
+      drinks.title,
+      drinks.volume,
+      drinks.alcoholPercentage,
+      drinks.barcode,
+      SUM(entries.amount) as amount,
+      strftime('%Y-%m-%d %H:00:00', created_at) AS date 
+
+    FROM entries
+    JOIN drinks ON entries.drink_id = drinks.id
+
     WHERE
-      created_at >= datetime('now', '-2 day', 'localtime') 
-      AND created_at <= datetime('now', '+2 day', 'localtime')
+      created_at >= datetime('now', '-1 day', 'localtime') 
+      AND created_at <= datetime('now', '+1 day', 'localtime')
       AND user_id = ?
     GROUP BY
-      date 
+        date, entries.drink_id
     ORDER BY
-      date ASC`, [res.locals.user.id],
+        entries.created_at ASC
+    `,
+    [res.locals.user.id],
     (err: any, entries: Entry[]) => {
       if (err) return res.send(err);
 
-      DatabaseAdapter.db.all(`
-        SELECT * FROM items
-      `, (err: any, items: Item[]) => {
-        if (err) return res.send(err);
+      DatabaseAdapter.db.all(
+        `
+        SELECT * FROM drinks
+      `,
+        (err: any, drinks: Drink[]) => {
+          if (err) return res.send(err);
 
-        res.render("pages/index", { entries, items, user: res.locals.user });
-      })
-
-
-    })
-
+          res.render('pages/index', { entries, drinks, user: res.locals.user });
+        }
+      );
+    }
+  );
 });
 
-router.get("/profile", AuthMiddleware, function (req, res) {
-  res.render("pages/profile");
+router.get('/profile', AuthMiddleware, function (req, res) {
+  res.render('pages/profile');
 });
 
-router.use('/auth', AuthRouter)
+router.use('/entries', EntriesRouter);
+router.use('/auth', AuthRouter);
 
 export default router;

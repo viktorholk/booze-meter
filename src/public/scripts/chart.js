@@ -1,4 +1,4 @@
-function createChart(id, data) {
+function createChart(id, groupedEntries, calculations) {
   const chartContext = document.getElementById(id);
 
   return new Chart(chartContext, {
@@ -8,7 +8,7 @@ function createChart(id, data) {
         {
           type: 'line',
           label: 'BAC',
-          data: data.calculations,
+          data: calculations,
           fill: false,
           borderColor: 'rgba(99, 132, 255, 0.8)',
           backgroundColor: 'rgba(99, 132, 255, 1)',
@@ -17,13 +17,13 @@ function createChart(id, data) {
         {
           type: 'bar',
           label: 'Amount of Drinks',
-          data: data.patchedEntries.map((e) => e.total_amount),
+          data: _.map(groupedEntries, (entries) => _.sumBy(entries, 'amount')),
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1
         }
       ],
-      labels: data.patchedEntries.map((e) => e.date.format('HH:mm'))
+      labels: _.map(Object.keys(groupedEntries), (d) => moment(d).format('HH:mm'))
     },
     options: {
       interaction: {
