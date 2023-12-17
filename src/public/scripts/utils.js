@@ -85,5 +85,23 @@ function generateDatasets(user, entries) {
     calculations.push(BAC);
   }
 
+  // Now we have handled all the entries up until the last
+  // But we also want to feed the graph until the BAC is at 0.0
+  // After burn
+
+  let latestBAC = calculations[calculations.length - 1];
+
+  const hoursRemaining = Math.ceil(latestBAC / 0.15);
+  console.log(hoursRemaining);
+
+  const dates = Object.keys(groupedEntries);
+
+  for (let i = 0; i < hoursRemaining; i++) {
+    const date = moment(dates[dates.length - 1]).add(i + 1, 'hours');
+
+    groupedEntries[date] = { amount: 0 };
+    calculations.push(Math.max(latestBAC - 0.15 * (i + 1), 0));
+  }
+
   return { groupedEntries, calculations };
 }
