@@ -336,7 +336,8 @@
           html5QrcodeScanner.clear().then((_) => {
             const existingDrinkIndex = drinks.findIndex((d) => d.barcode == barcode);
 
-            if (existingDrinkIndex) document.getElementById('drinkId').selectedIndex = existingDrinkIndex;
+            // if above -1 it means it exists
+            if (existingDrinkIndex > -1) document.getElementById('drinkId').selectedIndex = existingDrinkIndex;
             else {
               // Handle the advanced checkbox
               const checkbox = document.getElementById('advancedCheck');
