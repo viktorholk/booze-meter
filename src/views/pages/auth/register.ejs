@@ -8,10 +8,10 @@
     <%- include('../../partials/head'); %>
   </head>
   <body>
-    <header><%- include('../../partials/header'); %></header>
-    <div class="container mt-5">
+    <div class="container">
+      <header><%- include('../../partials/header'); %></header>
       <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-5">
           <div class="card">
             <div class="card-header">
               <h4>Register</h4>
@@ -19,7 +19,7 @@
             <div class="card-body">
               <form action="/auth/register" method="post">
                 <div class="form-group">
-                  <label for="username">Username:</label>
+                  <label for="username">Username</label>
                   <input
                     type="text"
                     class="form-control"
@@ -29,7 +29,7 @@
                   />
                 </div>
                 <div class="form-group">
-                  <label for="password">Password:</label>
+                  <label for="password">Password</label>
                   <input
                     type="password"
                     class="form-control"
@@ -39,7 +39,7 @@
                   />
                 </div>
                 <div class="form-group">
-                  <label for="confirmPassword">Confirm Password:</label>
+                  <label for="confirmPassword">Confirm Password</label>
                   <input
                     type="password"
                     class="form-control"
@@ -48,11 +48,14 @@
                     placeholder="Confirm your password"
                   />
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+
+                <% if (locals.message) { %>
+                <p class="message"><b><%= message %></b></p>
+                <% } %>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary right">Register</button>
+                </div>
               </form>
-              <% if (locals.message) { %>
-              <p class="text-center"><b><%= message %></b></p>
-              <% } %>
             </div>
           </div>
         </div>

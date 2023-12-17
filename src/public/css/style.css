@@ -107,11 +107,18 @@ body {
   display: flex;
   justify-content: space-between;
 }
-
-.modal .add-btn {
+.btn-primary {
   color: #1a1a1a;
   background-color: rgba(99, 132, 255, 1);
   font-weight: bold;
+}
+.btn-primary:hover {
+  /* overwrite bootstraps hover */
+  color: #1a1a1a;
+  background-color: rgba(99, 132, 255, 1);
+}
+
+.modal .add-btn {
   width: 100%;
 }
 .modal .scan-btn {
@@ -152,4 +159,21 @@ body {
   color: rgba(99, 132, 255, 1);
   font-weight: bold;
   font-style: normal;
+}
+
+.card {
+  background-color: #1a1a1a;
+  color: #fff;
+  border-radius: 16px;
+}
+
+.card-header h4 {
+  font-weight: bold;
+  text-align: center;
+  color: rgba(99, 132, 255, 1);
+  font-size: 2em;
+}
+.message {
+  color: rgba(255, 99, 132, 1);
+  text-align: center;
 }
