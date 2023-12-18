@@ -63,7 +63,14 @@ router.get('/', AuthMiddleware, function (req: Request, res: Response) {
 router.get('/profile', AuthMiddleware, function (req, res) {
   DatabaseAdapter.db.all(
     `
-    SELECT * from entries 
+    SELECT 
+    entries.id,
+    entries.drink_id,
+    entries.amount,
+    entries.created_at,
+    drinks.title
+    
+    FROM entries 
 
     JOIN drinks on entries.drink_id = drinks.id
     WHERE user_id = ?
