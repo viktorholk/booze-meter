@@ -4,6 +4,7 @@ import AuthMiddleware from '../middleware/auth';
 
 import AuthRouter from './auth';
 import EntriesRouter from './entries';
+import UsersRouter from './users';
 import DatabaseAdapter from '../utils/database-adapter';
 
 import Entry from '../types/entry';
@@ -59,10 +60,24 @@ router.get('/', AuthMiddleware, function (req: Request, res: Response) {
 });
 
 router.get('/profile', AuthMiddleware, function (req, res) {
-  res.render('pages/profile');
+  DatabaseAdapter.db.all(
+    `
+    SELECT * from entries 
+
+    JOIN drinks on entries.drink_id = drinks.id
+    WHERE user_id = ?
+  `,
+    [res.locals.user.id],
+    (err: any, entries: Entry[]) => {
+      if (err) return res.send(err);
+
+      res.render('pages/profile', { entries });
+    }
+  );
 });
 
 router.use('/entries', EntriesRouter);
 router.use('/auth', AuthRouter);
+router.use('/users', UsersRouter);
 
 export default router;

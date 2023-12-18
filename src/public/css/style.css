@@ -177,3 +177,52 @@ body {
   color: rgba(255, 99, 132, 1);
   text-align: center;
 }
+
+.profile-card {
+  background-color: #1a1a1a;
+  border-radius: 16px;
+  color: #fff;
+  gap: 16px;
+  padding: 16px;
+}
+
+.profile-card h1 {
+  text-align: center;
+  color: rgba(99, 132, 255, 1);
+  font-weight: bold;
+}
+
+.profile-card .header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.profile-card .header p {
+  font-weight: bold;
+}
+
+.profile-card .icon {
+  text-align: center;
+  width: 64px;
+}
+
+.profile-page {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.profile-page > div {
+  flex: 1;
+}
+
+/* Entries card */
+.profile-page > div:nth-child(3) {
+  flex-basis: 100%;
+
+  max-height: 516px;
+  overflow-y: scroll;
+}

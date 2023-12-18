@@ -3,136 +3,127 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Profile Page</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    <style>
-      body {
-        background-color: #f0f2f5;
-      }
+    <title>Profile</title>
 
-      .container {
-        margin-top: 50px;
-      }
-
-      .profile-card {
-        background-color: #fff;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      .profile-picture {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 20px;
-      }
-
-      .profile-name {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 10px;
-      }
-
-      .profile-username {
-        font-size: 18px;
-        color: #888;
-        margin-bottom: 10px;
-      }
-
-      .profile-email {
-        font-size: 18px;
-        color: #888;
-        margin-bottom: 10px;
-      }
-
-      .profile-alcohol {
-        font-size: 18px;
-        color: #888;
-      }
-    </style>
+    <%- include('../partials/head'); %>
   </head>
 
   <body>
-    <header><%- include('../partials/header'); %></header>
+    <div class="drink-background"></div>
+
     <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <div class="profile-card">
-            <div class="text-center">
-              <h2 class="profile-name">Hello <%= locals.user.username %></h2>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">Username:</span>
+      <header><%- include('../partials/header'); %></header>
+
+      <div class="profile-page">
+        <div class="profile-card">
+          <div class="header">
+            <img class="icon" src="/images/account-settings.svg" />
+            <p>User Settings</p>
+          </div>
+
+          <form action="/users" method="post">
+            <div class="form-row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="username"
+                    id="username"
+                    value="<%=user.username%>"
+                    disabled
+                  />
                 </div>
-                <input type="text" class="form-control profile-username" value="<%= locals.user.username%>" />
               </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">Password:</span>
+              <div class="col">
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input class="form-control" name="password" id="password" type="password" placeholder="********" />
                 </div>
-                <input type="password" class="form-control profile-email" value="******" />
-              </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">Yearly Alcohol Consumption:</span>
-                </div>
-                <input type="text" class="form-control profile-alcohol" disabled="true" value="1000 units" />
               </div>
             </div>
-            <div class="text-center">
-              <!-- ...existing code... -->
-
-              <h3 class="mt-4">Alcohol Consumption History</h3>
-              <ul class="list-group mb-3" id="alcoholHistory">
-                <!-- Sample list item -->
-                <li class="list-group-item">2023-1-1: 5 units</li>
-              </ul>
-
-              <h4>Add New Entry</h4>
-              <form id="addAlcoholEntry" class="form-inline justify-content-center mb-3">
-                <div class="input-group">
-                  <input type="date" class="form-control" id="newEntryDate" />
-                  <input type="number" class="form-control" id="newEntryAmount" placeholder="Amount" />
-                  <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">Add</button>
-                  </div>
+            <div class="form-row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="weight">Weight</label>
+                  <input
+                    class="form-control"
+                    name="weight"
+                    id="weight"
+                    type="number"
+                    min="0"
+                    value="<%=user.weight%>"
+                  />
                 </div>
-              </form>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="gender">Gender</label>
+                  <select class="form-control" name="gender" id="gender">
+                    <option value="0">Male</option>
+                    <option value="1">Female</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center mb-2">
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+          </form>
+        </div>
+        <div class="profile-card">
+          <div class="header">
+            <img class="icon" src="/images/query-stats.svg" />
+            <p>Statistics</p>
+          </div>
+          <div class="summaries px-2">
+            <div>
+              <div>Total drinks</div>
+              <div id="totalDrinks" class="time">dwadw</div>
             </div>
           </div>
         </div>
+        <div class="profile-card"">
+        <div class="header">
+          <img class="icon" src="/images/database.svg" />
+          <p>Entries</p>
+        </div>
+
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Drink</th>
+              <th>Amount</th>
+              <th>Volume (mL)</th>
+              <th>alcohol (%)</th>
+              <th>Date</th>
+            </tr>
+
+            <% entries.forEach((entry) => { %>
+
+            <tr>
+              <td><%= entry.title%></td>
+              <td><%= entry.amount%></td>
+              <td><%= entry.volume%></td>
+              <td><%= entry.alcoholPercentage%></td>
+              <td><%= entry.created_at%></td>
+            </tr>
+
+            <% }); %>
+          </thead>
+        </table>
       </div>
     </div>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-      function addBackgroundImage() {
-        const randomImage = images[Math.floor(Math.random() * images.length)];
-        const body = document.querySelector('body');
-        const img = document.createElement('img');
-        img.src = 'beer.png';
-        img.style.position = 'absolute';
-        img.style.width = '50px';
-        img.style.height = '50px';
-        img.style.left = Math.random() * window.innerWidth + 'px';
-        img.style.top = Math.random() * window.innerHeight + 'px';
-        img.style.zIndex = -1;
-        body.appendChild(img);
-      }
 
-      document.getElementById('addAlcoholEntry').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const date = document.getElementById('newEntryDate').value;
-        const amount = document.getElementById('newEntryAmount').value;
-        if (date && amount) {
-          const listItem = document.createElement('li');
-          listItem.classList.add('list-group-item');
-          listItem.textContent = `${date}: ${amount} units`;
-          document.getElementById('alcoholHistory').appendChild(listItem);
-          addBackgroundImage();
-        }
-      });
+    <script>
+      const dataEntries = JSON.parse('<%- JSON.stringify(entries) %>');
+      const user = JSON.parse('<%- JSON.stringify(user) %>');
+
+      document.getElementById('totalDrinks').innerHTML = _.sum(_.map(dataEntries, 'amount'));
+
+      document.getElementById('gender').selectedIndex = user.gender;
     </script>
   </body>
 </html>
