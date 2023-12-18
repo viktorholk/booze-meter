@@ -235,7 +235,7 @@
                 </div>
               </div>
 
-              <p class="message" id="addFormMessage">this</p>
+              <p class="message" id="addFormMessage"></p>
             </form>
           </div>
         </div>
@@ -403,14 +403,19 @@
           method: 'POST',
           body: urlSearchParams
         })
-          .then((_) => {
-            // Request is successfull
-            location.reload(); // Will trigger the new entry to show up on the graph
+          .then(async (response) => {
+            const status = response.status;
+
+            // Will trigger the new entry to show up on the graph
+            if (status == 200) return location.reload();
+
+            if (status == 400) {
+              document.getElementById('addFormMessage').innerHTML = await response.text();
+            }
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
             // Do nothing
-            document.getElementById('addFormMessage').innerHTML = err;
           });
       }
     </script>

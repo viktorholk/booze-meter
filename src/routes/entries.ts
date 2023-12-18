@@ -8,7 +8,6 @@ import moment, { Moment } from 'moment';
 import Drink from '../types/drink';
 
 const createEntry = (userId: number, drinkId: number, amount: number, date: Moment) => {
-  console.log(date.format('YYYY-MM-DD HH:mm'));
   DatabaseAdapter.db.run(
     `
     INSERT INTO entries
@@ -36,11 +35,14 @@ router.post('/', AuthMiddleware, function (req: Request, res: Response) {
 
     const volume = Number(data.advancedVolume);
     const alcoholPercentage = parseFloat(data.advancedAlcoholProcentage);
-    const barcode = data.advancedBarcode;
+    const barcode = data.advancedBarcode.length > 0 ? data.advancedBarcode : null;
     const amount = Number(data.advancedAmount);
 
+    if (title.length == 0) return res.status(400).send('Missing title');
+    if (!alcoholPercentage) return res.status(400).send('Missing alcohol percentage');
+    if (!volume) return res.status(400).send('Missing volume');
+
     if (volume && alcoholPercentage && amount) {
-      console.log('yess');
       DatabaseAdapter.db.get(
         `
         SELECT * FROM drinks
@@ -58,7 +60,7 @@ router.post('/', AuthMiddleware, function (req: Request, res: Response) {
           `,
               [volume, alcoholPercentage, barcode, title],
               function (err: any) {
-                if (err) return res.send(err);
+                if (err) return res.status(400).send(err.message);
                 createEntry(userId, row.id, amount, date);
                 res.redirect('/');
               }
@@ -73,21 +75,17 @@ router.post('/', AuthMiddleware, function (req: Request, res: Response) {
           `,
               [title, volume, alcoholPercentage, barcode],
               function (err: any) {
-                console.log(title, volume, alcoholPercentage, barcode, this.lastID);
-                console.log(err);
-                if (err) return res.send(err);
+                if (err) return res.status(400).send(err.message);
 
                 if (this.lastID) {
                   createEntry(userId, this.lastID, amount, date);
+                  res.redirect('/');
                 }
               }
             );
           }
         }
       );
-    } else {
-      console.log('error');
-      res.send(400);
     }
   }
 });
