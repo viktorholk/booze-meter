@@ -7,8 +7,6 @@ import DatabaseAdapter from '../utils/database-adapter';
 const router = Router();
 
 router.delete('/:drinkId', AuthMiddleware, (req: Request, res: Response) => {
-  console.log(req.params);
-
   DatabaseAdapter.db.run(
     `
     DELETE FROM drinks 
