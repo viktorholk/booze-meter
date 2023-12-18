@@ -137,13 +137,15 @@ body {
 
 .panel {
   padding: 16px;
+  height: 100%;
 }
 .panel h1 {
   font-weight: bold;
 }
 
-.entries-panel {
+.entries-table {
   overflow-y: scroll;
+  height: 70%;
 }
 
 .summaries > div {
@@ -225,4 +227,10 @@ body {
 
   max-height: 516px;
   overflow-y: scroll;
+}
+
+.entries-panel .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

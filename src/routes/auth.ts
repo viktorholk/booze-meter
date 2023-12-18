@@ -53,7 +53,7 @@ router.get('/register', function (req: Request, res: Response) {
 });
 
 router.post('/register', function (req: Request, res: Response) {
-  const username = req.body['username'];
+  const username = req.body['username'].toLowerCase();
   const password = req.body['password'];
   const password2 = req.body['password2'];
 
@@ -77,7 +77,7 @@ router.post('/register', function (req: Request, res: Response) {
             function (err) {
               const newUser: User = {
                 id: this.lastID,
-                username: username.toLowerCase(),
+                username: username,
                 password: hash
               };
               const token = generateToken(newUser);

@@ -38,4 +38,4 @@ VALUES (
   );
 INSERT
   OR IGNORE INTO drinks (title, volume, alcoholPercentage)
-VALUES ('Vodka Shot (330mL)', 44, 35);
+VALUES ('Vodka Shot (40mL)', 44, 35);
