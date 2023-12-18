@@ -4,6 +4,7 @@ import AuthMiddleware from '../middleware/auth';
 
 import AuthRouter from './auth';
 import EntriesRouter from './entries';
+import DrinksRouter from './drinks';
 import UsersRouter from './users';
 import DatabaseAdapter from '../utils/database-adapter';
 
@@ -27,14 +28,14 @@ router.get('/', AuthMiddleware, function (req: Request, res: Response) {
       drinks.alcoholPercentage,
       drinks.barcode,
       SUM(entries.amount) as amount,
-      strftime('%Y-%m-%d %H:00:00', created_at) AS date 
+      strftime('%Y-%m-%d %H:00:00', entries.created_at) AS date 
 
     FROM entries
     JOIN drinks ON entries.drink_id = drinks.id
 
     WHERE
-      created_at >= datetime('now', '-1 day', 'localtime') 
-      AND created_at <= datetime('now', '+1 day', 'localtime')
+      entries.created_at >= datetime('now', '-1 day', 'localtime') 
+      AND entries.created_at <= datetime('now', '+1 day', 'localtime')
       AND user_id = ?
     GROUP BY
         date, entries.drink_id
@@ -43,7 +44,7 @@ router.get('/', AuthMiddleware, function (req: Request, res: Response) {
     `,
     [res.locals.user.id],
     (err: any, entries: Entry[]) => {
-      if (err) return res.send(err);
+      if (err) return res.send(err.message);
 
       DatabaseAdapter.db.all(
         `
@@ -69,14 +70,22 @@ router.get('/profile', AuthMiddleware, function (req, res) {
   `,
     [res.locals.user.id],
     (err: any, entries: Entry[]) => {
-      if (err) return res.send(err);
-
-      res.render('pages/profile', { entries });
+      if (err) return res.send(err.message);
+      DatabaseAdapter.db.all(
+        `
+      SELECT * from drinks
+      `,
+        (err: any, drinks: Drink[]) => {
+          if (err) return res.send(err.message);
+          res.render('pages/profile', { entries, drinks });
+        }
+      );
     }
   );
 });
 
 router.use('/entries', EntriesRouter);
+router.use('/drinks', DrinksRouter);
 router.use('/auth', AuthRouter);
 router.use('/users', UsersRouter);
 

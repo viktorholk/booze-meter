@@ -90,4 +90,19 @@ router.post('/', AuthMiddleware, function (req: Request, res: Response) {
   }
 });
 
+router.delete('/:entryId', AuthMiddleware, (req: Request, res: Response) => {
+  DatabaseAdapter.db.run(
+    `
+    DELETE FROM entries
+    WHERE id = ?
+  `,
+    [req.params.entryId],
+    (err: any) => {
+      if (!err) {
+        res.sendStatus(200);
+      }
+    }
+  );
+});
+
 export default router;

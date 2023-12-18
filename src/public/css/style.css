@@ -202,6 +202,9 @@ body {
   padding-top: 16px;
   padding-bottom: 16px;
 }
+.profile-card {
+  margin-bottom: 16px;
+}
 .profile-card .header p {
   font-weight: bold;
 }
@@ -211,23 +214,22 @@ body {
   width: 64px;
 }
 
-.profile-page {
+.profile-page .profile-top {
   display: flex;
-  flex-wrap: wrap;
   gap: 16px;
 }
 
-.profile-page > div {
+.profile-page .profile-top > div {
   flex: 1;
 }
 
 /* Entries card */
-.profile-page > div:nth-child(3) {
+/* .profile-page > div:nth-child(3) {
   flex-basis: 100%;
 
   max-height: 516px;
   overflow-y: scroll;
-}
+} */
 
 .entries-panel .header {
   display: flex;

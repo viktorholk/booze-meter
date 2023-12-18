@@ -15,109 +15,189 @@
       <header><%- include('../partials/header'); %></header>
 
       <div class="profile-page">
+        <div class="profile-top">
+          <div class="profile-card">
+            <div class="header">
+              <img class="icon" src="/images/account-settings.svg" />
+              <p>User Settings</p>
+            </div>
+
+            <form action="/users" method="post">
+              <div class="form-row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="username"
+                      id="username"
+                      value="<%=user.username%>"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input class="form-control" name="password" id="password" type="password" placeholder="********" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="weight">Weight</label>
+                    <input
+                      class="form-control"
+                      name="weight"
+                      id="weight"
+                      type="number"
+                      min="0"
+                      value="<%=user.weight%>"
+                    />
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select class="form-control" name="gender" id="gender">
+                      <option value="0">Male</option>
+                      <option value="1">Female</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-center mb-2">
+                <button type="submit" class="btn btn-primary">Update</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="profile-card">
+            <div class="header">
+              <img class="icon" src="/images/query-stats.svg" />
+              <p>Statistics</p>
+            </div>
+            <div class="summaries px-2">
+              <div>
+                <div>Total drinks</div>
+                <div id="totalDrinks" class="time">dwadw</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="profile-card">
           <div class="header">
-            <img class="icon" src="/images/account-settings.svg" />
-            <p>User Settings</p>
+            <img class="icon" src="/images/database.svg" />
+            <p>Entries</p>
           </div>
 
-          <form action="/users" method="post">
-            <div class="form-row">
-              <div class="col">
-                <div class="form-group">
-                  <label for="username">Username</label>
-                  <input
-                    class="form-control"
-                    type="text"
-                    name="username"
-                    id="username"
-                    value="<%=user.username%>"
-                    disabled
-                  />
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input class="form-control" name="password" id="password" type="password" placeholder="********" />
-                </div>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="col">
-                <div class="form-group">
-                  <label for="weight">Weight</label>
-                  <input
-                    class="form-control"
-                    name="weight"
-                    id="weight"
-                    type="number"
-                    min="0"
-                    value="<%=user.weight%>"
-                  />
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-group">
-                  <label for="gender">Gender</label>
-                  <select class="form-control" name="gender" id="gender">
-                    <option value="0">Male</option>
-                    <option value="1">Female</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Drink</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
 
-            <div class="text-center mb-2">
-              <button type="submit" class="btn btn-primary">Update</button>
-            </div>
-          </form>
+              <% entries.forEach((entry) => { %>
+
+              <tr>
+                <td class="row-id"><%= entry.id %></td>
+                <td><%= entry.title%></td>
+                <td><%= entry.amount%></td>
+                <td><%= entry.created_at%></td>
+                <td><button class="btn btn-primary" onclick="deleteEntry(this)">Delete</button></td>
+              </tr>
+
+              <% }); %>
+            </thead>
+          </table>
         </div>
+
         <div class="profile-card">
           <div class="header">
-            <img class="icon" src="/images/query-stats.svg" />
-            <p>Statistics</p>
+            <img class="icon" src="/images/beer.svg" />
+            <p>Drinks</p>
           </div>
-          <div class="summaries px-2">
-            <div>
-              <div>Total drinks</div>
-              <div id="totalDrinks" class="time">dwadw</div>
-            </div>
-          </div>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Volume</th>
+                <th>alcohol (%)</th>
+                <th>barcode</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+
+              <% drinks.forEach((drink) => { %>
+
+              <tr>
+                <td class="row-id"><%= drink.id %></td>
+                <td><%= drink.title%></td>
+                <td><%= drink.volume %></td>
+                <td><%= drink.alcoholPercentage%></td>
+                <td><%= drink.barcode%></td>
+                <td><%= drink.created_at%></td>
+                <td><button class="btn btn-primary" onclick="deleteDrink(this)">Delete</button></td>
+              </tr>
+
+              <% }); %>
+            </thead>
+          </table>
         </div>
-        <div class="profile-card"">
-        <div class="header">
-          <img class="icon" src="/images/database.svg" />
-          <p>Entries</p>
-        </div>
-
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Drink</th>
-              <th>Amount</th>
-              <th>Volume (mL)</th>
-              <th>alcohol (%)</th>
-              <th>Date</th>
-            </tr>
-
-            <% entries.forEach((entry) => { %>
-
-            <tr>
-              <td><%= entry.title%></td>
-              <td><%= entry.amount%></td>
-              <td><%= entry.volume%></td>
-              <td><%= entry.alcoholPercentage%></td>
-              <td><%= entry.created_at%></td>
-            </tr>
-
-            <% }); %>
-          </thead>
-        </table>
       </div>
     </div>
 
     <script>
+      function deleteEntry(element) {
+        const row = element.parentNode.parentNode; // Get the row
+        const rowIndex = row.rowIndex;
+
+        const rowId = row.querySelector('.row-id').innerHTML;
+
+        const confirmDelete = confirm('Are you sure you want to delete entry with iD ' + rowId + '?');
+
+        if (confirmDelete) {
+          fetch(`/entries/${rowId}`, {
+            method: 'DELETE'
+          }).then((response) => {
+            if (response.status == 200) {
+              // Reload the page resulting in the entry being removed from the view
+              location.reload();
+            }
+          });
+        }
+      }
+
+      function deleteDrink(element) {
+        const row = element.parentNode.parentNode; // Get the row
+        const rowIndex = row.rowIndex;
+
+        const rowId = row.querySelector('.row-id').innerHTML;
+
+        const confirmDelete = confirm('Are you sure you want to delete drink with iD ' + rowId + '?');
+
+        if (confirmDelete) {
+          fetch(`/drinks/${rowId}`, {
+            method: 'DELETE'
+          }).then((response) => {
+            if (response.status == 200) {
+              // Reload the page resulting in the entry being removed from the view
+              location.reload();
+            }
+          });
+        }
+      }
+
       const dataEntries = JSON.parse('<%- JSON.stringify(entries) %>');
       const user = JSON.parse('<%- JSON.stringify(user) %>');
 
