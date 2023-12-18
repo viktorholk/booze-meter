@@ -19,10 +19,8 @@ router.get('/logout', function (req: Request, res: Response) {
 });
 
 router.get('/login', function (req: Request, res: Response) {
-  // Only enable the /login route if no user is provided
-  if (req.cookies.token) {
-    res.redirect('/');
-  } else res.render('pages/auth/login');
+  // Make sure the token has been cleared so we dont create a redirect chain
+  res.clearCookie('token').render('pages/auth/login');
 });
 
 router.post('/login', function (req: Request, res: Response) {
@@ -51,7 +49,7 @@ router.post('/login', function (req: Request, res: Response) {
 });
 
 router.get('/register', function (req: Request, res: Response) {
-  res.render('pages/auth/register');
+  res.clearCookie('token').render('pages/auth/register');
 });
 
 router.post('/register', function (req: Request, res: Response) {
